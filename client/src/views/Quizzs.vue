@@ -23,14 +23,13 @@
             showClear
             @change="getQuizzsWithSearch()"
           />
-          <span class="p-input-icon-left">
-            <i class="pi pi-search" />
-            <InputText
-              type="text"
-              v-model="searchFilter"
-              placeholder="Catégorie..."
-            />
-          </span>
+          <Dropdown
+            v-model="selectedCategory"
+            :options="categories"
+            placeholder="Choix de la catégorie"
+            showClear
+            @change="getQuizzsWithSearch()"
+          />
         </template>
       </Toolbar>
 
@@ -87,23 +86,27 @@
 </template>
 
 <script>
-import gameController from "@/controllers/game.controller";
-import { debounce } from "debounce";
+import gameController from '@/controllers/game.controller';
+import { debounce } from 'debounce';
 
 export default {
   data() {
     return {
       isLoadingData: false,
-      searchFilter: "",
       difficulties: [
-        { label: "Facile", value: "1" },
-        { label: "Moyen", value: "2" },
-        { label: "Difficile", value: "3" },
+        { label: 'Facile', value: '1' },
+        { label: 'Moyen', value: '2' },
+        { label: 'Difficile', value: '3' },
       ],
+      categories: [],
+      selectedCategory: null,
       selectedDifficulty: null,
       isLoading: false,
       quizzs: [],
       errors: [],
+      hasScrolledToBottom: false,
+      limit: 50,
+      offset: 50,
     };
   },
 
@@ -122,11 +125,26 @@ export default {
         this.errors.push(response.data.error);
       });
 
+    await gameController
+      .getCategories()
+      .then((response) => {
+        this.categories = response.data.categories;
+      })
+      .catch(({ response }) => {
+        this.errors.push(response.data.error);
+      });
+
+    window.addEventListener('scroll', this.handleScroll);
+
     this.isLoadingData = false;
   },
 
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+
   methods: {
-    async getQuizzsWithSearch(search = this.searchFilter) {
+    async getQuizzsWithSearch(search = this.selectedCategory, offset, limit) {
       this.isLoadingData = true;
 
       let params = {
@@ -134,13 +152,23 @@ export default {
       };
 
       if (search) {
-        params["label"] = search;
+        params['label'] = search;
+      }
+
+      if (offset) {
+        params['offset'] = offset;
+      }
+
+      if (limit) {
+        params['limit'] = limit;
       }
 
       await gameController
         .getQuizzs(params)
         .then((response) => {
-          this.quizzs = response.data.quizz;
+          if (response.data.quizz.length === 0) return;
+          if (offset) this.quizzs.push(...response.data.quizz);
+          else this.quizzs = response.data.quizz;
         })
         .catch(({ response }) => {
           this.errors.push(response.data.error);
@@ -148,10 +176,26 @@ export default {
 
       this.isLoadingData = false;
     },
+
+    handleScroll: function () {
+      if (
+        window.innerHeight + window.scrollY + 50 >=
+          document.body.offsetHeight &&
+        !this.isLoadingData
+      ) {
+        this.getQuizzsWithSearch(
+          this.selectedCategory,
+          this.offset,
+          this.limit
+        );
+
+        this.offset += this.limit;
+      }
+    },
   },
 
   watch: {
-    searchFilter: function (search) {
+    selectedCategory: function (search) {
       this.getQuizzsWithSearch(search);
     },
   },

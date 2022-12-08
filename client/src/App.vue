@@ -3,7 +3,7 @@
 </template>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -33,7 +33,6 @@ html {
 
 body {
   font-family: var(--font-family);
-  height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -45,7 +44,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
 }
 
 #nav {

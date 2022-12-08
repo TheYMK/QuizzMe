@@ -1,8 +1,10 @@
-const Question = require("../models/question.model");
-const Quizz = require("../models/quizz.model");
+const Question = require('../models/question.model');
+const Quizz = require('../models/quizz.model');
 
-exports.getAll = async (filters) => {
-  const quizz = await Quizz.find({ $and: [filters] });
+exports.getAll = async (filters, limit, offset) => {
+  const quizz = await Quizz.find({ $and: [filters] })
+    .limit(limit)
+    .skip(offset);
 
   return {
     quizz,
@@ -31,5 +33,13 @@ exports.getQuizzQuestions = async (id, withAnswer) => {
 
   return {
     questions,
+  };
+};
+
+exports.getCategories = async () => {
+  const categories = await Quizz.distinct('label');
+
+  return {
+    categories,
   };
 };

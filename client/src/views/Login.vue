@@ -68,9 +68,9 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
-import userController from "@/controllers/user.controller";
-import { userLogin } from "@/models/user.model";
+import useVuelidate from '@vuelidate/core';
+import userController from '@/controllers/user.controller';
+import { userLogin } from '@/models/user.model';
 
 export default {
   setup() {
@@ -79,8 +79,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       errors: [],
     };
   },
@@ -104,7 +104,7 @@ export default {
       await userController
         .login(body)
         .then(() => {
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: 'Home' });
         })
         .catch(({ response }) => {
           this.errors.push(response.data.error);
@@ -122,7 +122,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   background: #f3f5fe;
   position: relative;
 }

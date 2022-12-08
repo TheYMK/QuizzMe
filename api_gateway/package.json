@@ -4,9 +4,10 @@
   "description": "Proxy pour les échanges de données entre un front et des micro services.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "do-dev": "nodemon index.js"
   },
-  "author": "ava",
+  "author": "lilian",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.8.0",
