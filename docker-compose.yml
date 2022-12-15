@@ -36,6 +36,18 @@ services:
     networks:
       app_net:
         ipv4_address: 172.20.0.4
+  logger_microservice:
+    container_name: ${CONTAINER_NAME:?err}-LOGGER
+    build:
+      context: ./logger_module
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8083:8083"
+    command: npm start
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.5
 
 networks:
   app_net:

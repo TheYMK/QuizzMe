@@ -1,9 +1,10 @@
 const { Router } = require("express");
+const loggerHandler = require("../configs/logger.handler");
 const userRouter = Router();
 const userServices = require("../services/user.services");
 
 /* Custom handle errors */
-const handleErrors = (err) => {
+const handleErrors = async (err) => {
   let errors = {};
 
   if (err.message === "unknow user") {
@@ -21,6 +22,11 @@ const handleErrors = (err) => {
       errors[properties.path] = properties.message;
     });
   }
+
+  await loggerHandler({
+    message: err.message,
+    level: "error",
+  });
 
   return Object.keys(errors).length ? errors : err.message;
 };
