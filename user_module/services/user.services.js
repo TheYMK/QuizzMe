@@ -1,4 +1,4 @@
-const userDAO = require("../dao/user.dao");
+const userDAO = require('../dao/user.dao');
 
 exports.register = async (body) => {
   const user = ({ email, password, username } = body);
