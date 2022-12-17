@@ -24,9 +24,20 @@
                 <span><b>Note:</b> {{ score.grade }}</span>
               </div>
             </div>
-            <router-link :to="{ name: 'Score', params: { id: score.id } }">
-              <Button label="Voir les résultats" />
-            </router-link>
+            <div>
+              <router-link
+                :to="{ name: 'Rank', params: { id: score.quizzId } }"
+              >
+                <Button
+                  label="Voir le classement"
+                  style="margin-right: 1rem"
+                  class="p-button-secondary"
+                />
+              </router-link>
+              <router-link :to="{ name: 'Score', params: { id: score.id } }">
+                <Button label="Voir les résultats" />
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -51,7 +62,7 @@
 </template>
 
 <script>
-import scoreController from "@/controllers/score.controller";
+import scoreController from '@/controllers/score.controller';
 
 export default {
   data() {

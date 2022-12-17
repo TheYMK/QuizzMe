@@ -2,7 +2,7 @@ import {
   Score,
   ScoreAttributes,
   ScoreInputAttributes,
-} from "../models/score.model";
+} from '../models/score.model';
 
 export class ScoreDAO {
   public async addScore(score: ScoreInputAttributes): Promise<ScoreAttributes> {
@@ -10,15 +10,25 @@ export class ScoreDAO {
   }
 
   public async getScores(
-    userId: ScoreInputAttributes["userId"]
+    userId: ScoreInputAttributes['userId']
   ): Promise<ScoreAttributes[]> {
     return await Score.findAll({ where: { userId } });
   }
 
   public async getScore(
-    id: ScoreInputAttributes["id"],
-    userId: ScoreInputAttributes["userId"]
+    id: ScoreInputAttributes['id'],
+    userId: ScoreInputAttributes['userId']
   ): Promise<ScoreAttributes> {
     return await Score.findOne({ where: { id, userId } });
+  }
+
+  public async getRank(
+    quizzId: ScoreInputAttributes['quizzId']
+  ): Promise<ScoreAttributes[]> {
+    return await Score.findAll({
+      where: {
+        quizzId,
+      },
+    });
   }
 }
