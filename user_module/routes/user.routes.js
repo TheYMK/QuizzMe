@@ -4,7 +4,7 @@ const userRouter = Router();
 const userServices = require('../services/user.services');
 
 /* Custom handle errors */
-const handleErrors = async (err) => {
+const handleErrors = async (err, remoteAddr = null) => {
   let errors = {};
 
   if (err.message === 'unknow user') {
@@ -26,6 +26,7 @@ const handleErrors = async (err) => {
   await loggerHandler({
     message: err.message,
     level: 'error',
+    remoteAddr
   });
 
   return Object.keys(errors).length ? errors : err.message;
@@ -35,7 +36,7 @@ userRouter.post('/register', async (req, res) => {
   try {
     res.status(200).send(await userServices.register(req.body));
   } catch (err) {
-    res.status(500).send({ error: await handleErrors(err) });
+    res.status(500).send({ error: await handleErrors(err, req.body.remoteAddr) });
   }
 });
 
@@ -43,7 +44,7 @@ userRouter.post('/login', async (req, res) => {
   try {
     res.status(200).send(await userServices.login(req.body));
   } catch (err) {
-    res.status(500).send({ error: await handleErrors(err) });
+    res.status(500).send({ error: await handleErrors(err, req.body.remoteAddr) });
   }
 });
 
@@ -59,7 +60,7 @@ userRouter.post('/validate', async (req, res) => {
   try {
     res.status(200).send(await userServices.validateToken(req.body));
   } catch (err) {
-    res.status(500).send({ error: await handleErrors(err) });
+    res.status(500).send({ error: await handleErrors(err, req.body.remoteAddr) });
   }
 });
 
