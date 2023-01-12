@@ -36,6 +36,7 @@ app.use(limiter);
 require("./routes/api.routes.user")(app);
 require("./routes/api.routes.game")(app);
 require("./routes/api.routes.score")(app);
+require("./routes/api.routes.tips")(app);
 
 // Si aucune route n'a été trouvée
 app.get("/.*/", function (req, res) {
