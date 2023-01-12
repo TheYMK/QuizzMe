@@ -1,7 +1,7 @@
 var soap = require("soap");
 var url = "http://localhost:8086/wsdl?wsdl";
 
-exports.getDailyTips = async () => {
+exports.getDailyTips = async (maxTips) => {
   let tips = [];
   return soap.createClient(url, function (err, client) {
     if (err) {
@@ -9,7 +9,7 @@ exports.getDailyTips = async () => {
     }
 
     var args = {
-      length: "3",
+      length: maxTips,
     };
     // call the service
     client.TipsGenerator(args, function (err, res) {

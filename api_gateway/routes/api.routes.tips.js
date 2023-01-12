@@ -1,9 +1,9 @@
 const axios = require("axios");
 
 module.exports = (app) => {
-  app.get("/api/tips/daily-tips", function (req, res) {
+  app.get("/api/tips/daily-tips/:maxTips", function (req, res) {
     axios
-      .get(`http://localhost:8086/tips/daily-tips`)
+      .get(`http://localhost:8086/tips/daily-tips/${req.params.maxTips}`)
       .then(function (reponse) {
         res.status(200).send(reponse.data);
       })
