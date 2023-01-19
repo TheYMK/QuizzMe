@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import userController from "@/controllers/user.controller";
+import userController from '@/controllers/user.controller';
 
 export default {
   data() {
@@ -60,7 +60,7 @@ export default {
 
   methods: {
     async handleLogout() {
-      userController.logout().then(() => this.$router.replace("/login"));
+      userController.logout().then(() => this.$router.replace('/login'));
       this.isModalOpen = false;
     },
   },

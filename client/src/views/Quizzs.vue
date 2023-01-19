@@ -13,6 +13,11 @@
         </template>
 
         <template #end>
+          <Button
+            style="margin-right: 10px"
+            label="Besoin de se détendre ?"
+            @click="getRandomJoke"
+          />
           <Dropdown
             v-model="selectedDifficulty"
             :options="difficulties"
@@ -86,20 +91,21 @@
 </template>
 
 <script>
-import gameController from "@/controllers/game.controller";
-import { debounce } from "debounce";
-import { createToast } from "mosha-vue-toastify";
-import "mosha-vue-toastify/dist/style.css";
-import tipsController from "../controllers/tips.controller";
+import gameController from '@/controllers/game.controller';
+import { debounce } from 'debounce';
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
+import tipsController from '../controllers/tips.controller';
+import axiosApi from '../controllers/axios.config';
 
 export default {
   data() {
     return {
       isLoadingData: false,
       difficulties: [
-        { label: "Facile", value: "1" },
-        { label: "Moyen", value: "2" },
-        { label: "Difficile", value: "3" },
+        { label: 'Facile', value: '1' },
+        { label: 'Moyen', value: '2' },
+        { label: 'Difficile', value: '3' },
       ],
       categories: [],
       selectedCategory: null,
@@ -115,7 +121,7 @@ export default {
 
   async created() {
     this.isLoadingData = true;
-    const tipCategories = ["sport", "monde", "animaux", "science"];
+    const tipCategories = ['sport', 'monde', 'animaux', 'science'];
     const randomTipCategoryIndex = Math.floor(
       Math.random() * tipCategories.length
     );
@@ -126,7 +132,7 @@ export default {
       .getDailyTip(tipCategories[randomTipCategoryIndex])
       .then((response) => {
         createToast(`Le saviez-vous! ${response.data.tip}`, {
-          position: "bottom-right",
+          position: 'bottom-right',
           timeout: 10000,
         });
       });
@@ -148,16 +154,27 @@ export default {
         this.errors.push(response.data.error);
       });
 
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
 
     this.isLoadingData = false;
   },
 
   destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
   },
 
   methods: {
+    async getRandomJoke() {
+      await axiosApi
+        .get('https://api.chucknorris.io/jokes/random')
+        .then((response) => {
+          createToast(response.data.value, {
+            position: 'bottom-left',
+            timeout: 10000,
+          });
+        });
+    },
+
     async getQuizzsWithSearch(search = this.selectedCategory, offset, limit) {
       this.isLoadingData = true;
 
@@ -166,15 +183,15 @@ export default {
       };
 
       if (search) {
-        params["label"] = search;
+        params['label'] = search;
       }
 
       if (offset) {
-        params["offset"] = offset;
+        params['offset'] = offset;
       }
 
       if (limit) {
-        params["limit"] = limit;
+        params['limit'] = limit;
       }
 
       await gameController
