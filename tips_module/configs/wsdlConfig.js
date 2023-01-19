@@ -17,7 +17,6 @@ const generateTips = async (args) => {
       category: "sport",
     },
   ];
-  console.log(args.category);
 
   const filteredList = tips.filter((tip) => tip.category === args.category);
 
