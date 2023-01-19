@@ -12,6 +12,7 @@
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "debounce": "^1.2.1",
+    "mosha-vue-toastify": "^1.0.23",
     "primeicons": "^5.0.0",
     "primevue": "^3.9.1",
     "vue": "^3.0.0",

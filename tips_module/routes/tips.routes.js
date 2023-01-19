@@ -2,9 +2,9 @@ const { Router } = require("express");
 const tipsRouter = Router();
 const tipsService = require("../services/tips.services");
 
-tipsRouter.get("/daily-tips/:maxTips", async (req, res) => {
+tipsRouter.get("/daily-tip/:category", async (req, res) => {
   try {
-    res.status(200).send(await tipsService.getDailyTips(req.params.maxTips));
+    res.status(200).send(await tipsService.getDailyTips(req.params.category));
   } catch (err) {
     res.status(500).send({ error: err?.response?.message });
   }

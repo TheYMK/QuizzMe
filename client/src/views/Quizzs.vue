@@ -86,17 +86,20 @@
 </template>
 
 <script>
-import gameController from '@/controllers/game.controller';
-import { debounce } from 'debounce';
+import gameController from "@/controllers/game.controller";
+import { debounce } from "debounce";
+import { createToast } from "mosha-vue-toastify";
+import "mosha-vue-toastify/dist/style.css";
+import tipsController from "../controllers/tips.controller";
 
 export default {
   data() {
     return {
       isLoadingData: false,
       difficulties: [
-        { label: 'Facile', value: '1' },
-        { label: 'Moyen', value: '2' },
-        { label: 'Difficile', value: '3' },
+        { label: "Facile", value: "1" },
+        { label: "Moyen", value: "2" },
+        { label: "Difficile", value: "3" },
       ],
       categories: [],
       selectedCategory: null,
@@ -112,10 +115,21 @@ export default {
 
   async created() {
     this.isLoadingData = true;
-
+    const tipCategories = ["sport", "monde", "animaux", "science"];
+    const randomTipCategoryIndex = Math.floor(
+      Math.random() * tipCategories.length
+    );
     /* DEBOUNCE INPUT FILTER */
     this.getQuizzsWithSearch = debounce(this.getQuizzsWithSearch, 1000);
 
+    await tipsController
+      .getDailyTip(tipCategories[randomTipCategoryIndex])
+      .then((response) => {
+        createToast(`Le saviez-vous! ${response.data.tip}`, {
+          position: "bottom-right",
+          timeout: 10000,
+        });
+      });
     await gameController
       .getQuizzs()
       .then((response) => {
@@ -134,13 +148,13 @@ export default {
         this.errors.push(response.data.error);
       });
 
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
 
     this.isLoadingData = false;
   },
 
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
 
   methods: {
@@ -152,15 +166,15 @@ export default {
       };
 
       if (search) {
-        params['label'] = search;
+        params["label"] = search;
       }
 
       if (offset) {
-        params['offset'] = offset;
+        params["offset"] = offset;
       }
 
       if (limit) {
-        params['limit'] = limit;
+        params["limit"] = limit;
       }
 
       await gameController

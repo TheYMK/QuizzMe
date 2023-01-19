@@ -1,10 +1,28 @@
-const generateTips = (args) => {
-  const tips = ["tip1", "tip2", "tip3", "tip4", "tip5", "tip6"];
-  const shuffled = tips.sort(() => 0.5 - Math.random());
+const generateTips = async (args) => {
+  const tips = [
+    {
+      tip: " l’intensité des tremblements de terre est exprimée sur l'échelle de Richter",
+      category: "science",
+    },
+    {
+      tip: "Les bouddhistes sont les disciples du Bouddha. Cet homme était en réalité un riche prince",
+      category: "monde",
+    },
+    {
+      tip: "Certains oiseaux, comme le colibri, peuvent voler sur place",
+      category: "animaux",
+    },
+    {
+      tip: "Le sport qui consiste à descendre dans les grottes afin de les explorer s’appelle la spéléologie",
+      category: "sport",
+    },
+  ];
+  console.log(args.category);
 
-  let selected = shuffled.slice(0, parseInt(args.length));
+  const filteredList = tips.filter((tip) => tip.category === args.category);
 
-  return selected;
+  const randomIndex = Math.floor(Math.random() * filteredList.length);
+  return filteredList[randomIndex];
 };
 
 exports.serviceObject = {
